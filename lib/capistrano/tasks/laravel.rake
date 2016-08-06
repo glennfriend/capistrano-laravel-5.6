@@ -8,6 +8,7 @@ namespace :load do
     set :laravel_roles, :all
     set :laravel_migrate_roles, :all
     set :laravel_version, 5.1
+    set :laravel_working_dir, -> { fetch(:release_path) }
     set :laravel_dotenv_file, './.env'
     set :laravel_artisan_flags, '--env=production'
     set :laravel_artisan_migrate_flags, '--env=production'
@@ -75,6 +76,9 @@ namespace :laravel do
       laravel_acl_paths   = fetch(:laravel_5_1_acl_paths)
     end
 
+    laravel_linked_dirs = laravel_linked_dirs.map { |dir| File.join(fetch(:laravel_working_dir), dir) }
+    laravel_acl_paths = laravel_acl_paths.map { |dir| File.join(fetch(:laravel_working_dir), dir) }
+
     if fetch(:laravel_set_linked_dirs)
       set :linked_dirs, fetch(:linked_dirs, []).push(*laravel_linked_dirs)
     end
@@ -98,7 +102,7 @@ namespace :laravel do
 
       on roles fetch(:laravel_roles) do
         laravel_acl_paths.each do |path|
-          acl_path = release_path.join(path)
+          acl_path = File.join(shared_path, fetch(:laravel_working_dir), path)
           if test("[ ! -e '#{acl_path}' ]")
             execute :mkdir, '-vp', acl_path
           else
@@ -114,7 +118,7 @@ namespace :laravel do
     if fetch(:laravel_version) >= 5
       on roles fetch(:laravel_roles) do
         unless fetch(:laravel_dotenv_file).empty?
-          upload! fetch(:laravel_dotenv_file), "#{release_path}/.env"
+          upload! fetch(:laravel_dotenv_file), "#{fetch(:laravel_working_dir)}/.env"
         end
       end
     end
@@ -127,7 +131,7 @@ namespace :laravel do
     command = args[:command_name] || fetch(:cmd)
 
     on roles fetch(:laravel_roles) do
-      within release_path do
+      within fetch(:laravel_working_dir) do
         execute :php, :artisan, command, *args.extras, fetch(:laravel_artisan_flags)
       end
     end
@@ -151,7 +155,7 @@ namespace :laravel do
   desc 'Run migrations against the database using Artisan.'
   task :migrate_db do |_t, args|
     on roles fetch(:laravel_migrate_roles) do
-      within release_path do
+      within File.join(release_path, fetch(:laravel_working_dir)) do
         execute :php, :artisan, :migrate, *args.extras, fetch(:laravel_artisan_migrate_flags)
       end
     end
@@ -160,7 +164,7 @@ namespace :laravel do
   desc 'Rollback migrations against the database using Artisan.'
   task :rollback_db do
     on roles fetch(:laravel_roles) do
-      within release_path do
+      within File.join(release_path, fetch(:laravel_working_dir)) do
         execute :php, :artisan, 'migrate:rollback', *args.extras, fetch(:laravel_artisan_migrate_flags)
       end
     end

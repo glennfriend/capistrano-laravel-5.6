@@ -43,6 +43,9 @@ set :laravel_version, 5.1
 # This variable uploads the given file from the the host to the guest.
 set :laravel_dotenv_file, './.env'
 
+# Laravel installed path
+set :laravel_working_dir, -> { fetch(:release_path) }
+
 # Flags to add to artisan calls.
 set :laravel_artisan_flags, "--env=production"
 
