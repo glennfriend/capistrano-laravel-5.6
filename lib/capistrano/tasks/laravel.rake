@@ -131,7 +131,7 @@ namespace :laravel do
     command = args[:command_name] || fetch(:cmd)
 
     on roles fetch(:laravel_roles) do
-      within fetch(:laravel_working_dir) do
+      within File.join(release_path, fetch(:laravel_working_dir)) do
         execute :php, :artisan, command, *args.extras, fetch(:laravel_artisan_flags)
       end
     end
