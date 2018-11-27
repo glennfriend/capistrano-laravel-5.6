@@ -7,7 +7,7 @@ namespace :load do
   task :defaults do
     set :laravel_roles, :all
     set :laravel_migrate_roles, :all
-    set :laravel_version, 5.1
+    set :laravel_version, 5.6
     set :laravel_working_dir, -> { fetch(:release_path) }
     set :laravel_dotenv_file, './.env'
     set :laravel_artisan_flags, '--env=production'
