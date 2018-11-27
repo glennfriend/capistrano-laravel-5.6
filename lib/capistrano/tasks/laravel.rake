@@ -10,7 +10,7 @@ namespace :load do
     set :laravel_version, 5.6
     set :laravel_working_dir, -> { fetch(:release_path) }
     set :laravel_dotenv_file, './.env'
-    set :laravel_artisan_flags, '--env=production'
+    # set :laravel_artisan_flags, '--env=production'
     set :laravel_artisan_migrate_flags, '--env=production'
     set :laravel_set_linked_dirs, true
     set :laravel_set_acl_paths, true
@@ -124,18 +124,18 @@ namespace :laravel do
     end
   end
 
-  desc 'Execute a provided artisan command'
-  task :artisan, :command_name do |_t, args|
-    # ask only runs if argument is not provided
-    ask(:cmd, 'list')
-    command = args[:command_name] || fetch(:cmd)
-
-    on roles fetch(:laravel_roles) do
-      within File.join(release_path, fetch(:laravel_working_dir)) do
-        execute :php, :artisan, command, *args.extras, fetch(:laravel_artisan_flags)
-      end
-    end
-  end
+# desc 'Execute a provided artisan command'
+#  task :artisan, :command_name do |_t, args|
+#    # ask only runs if argument is not provided
+#    ask(:cmd, 'list')
+#    command = args[:command_name] || fetch(:cmd)
+#
+#    on roles fetch(:laravel_roles) do
+#      within File.join(release_path, fetch(:laravel_working_dir)) do
+#        execute :php, :artisan, command, *args.extras, fetch(:laravel_artisan_flags)
+#      end
+#    end
+#  end
 
 #  desc 'Optimize the configuration'
 #  task :optimize_config do
