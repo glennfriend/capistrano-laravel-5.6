@@ -7,8 +7,8 @@ Deploy Laravel applications with Capistrano v3.*
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'capistrano', '~> 3.0.0'
-gem 'capistrano-laravel'
+gem 'capistrano', '~> 3.10'
+gem 'capistrano-laravel', :git => 'https://github.com/glennfriend/capistrano-laravel-5.6.git', :tag => '5.6.1'
 ```
 
 And then execute:
