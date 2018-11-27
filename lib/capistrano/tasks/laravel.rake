@@ -7,7 +7,7 @@ namespace :load do
   task :defaults do
     set :laravel_roles, :all
     set :laravel_migrate_roles, :all
-    set :laravel_version, 5.1
+    set :laravel_version, 5.6
     set :laravel_working_dir, -> { fetch(:release_path) }
     set :laravel_dotenv_file, './.env'
     set :laravel_artisan_flags, '--env=production'
@@ -124,7 +124,7 @@ namespace :laravel do
     end
   end
 
-  desc 'Execute a provided artisan command'
+ desc 'Execute a provided artisan command'
   task :artisan, :command_name do |_t, args|
     # ask only runs if argument is not provided
     ask(:cmd, 'list')
@@ -147,10 +147,10 @@ namespace :laravel do
     invoke 'laravel:artisan', 'route:cache' if fetch(:laravel_version) >= 5
   end
 
-  desc 'Optimize a Laravel installation for optimimum performance in production.'
-  task :optimize_release do
-    invoke 'laravel:artisan', :optimize, :'--force'
-  end
+#  desc 'Optimize a Laravel installation for optimimum performance in production.'
+#  task :optimize_release do
+#    invoke 'laravel:artisan', :optimize, :'--force'
+#  end
 
   desc 'Run migrations against the database using Artisan.'
   task :migrate_db do |_t, args|
@@ -174,5 +174,5 @@ namespace :laravel do
   after 'deploy:symlink:shared', 'laravel:create_linked_acl_paths'
   after 'deploy:symlink:shared', 'deploy:set_permissions:acl'
   after 'deploy:symlink:shared', 'laravel:upload_dotenv_file'
-  before 'deploy:updated', 'laravel:optimize_release'
+  # before 'deploy:updated', 'laravel:optimize_release'
 end
