@@ -147,10 +147,10 @@ namespace :laravel do
     invoke 'laravel:artisan', 'route:cache' if fetch(:laravel_version) >= 5
   end
 
-  desc 'Optimize a Laravel installation for optimimum performance in production.'
-  task :optimize_release do
-    invoke 'laravel:artisan', :optimize, :'--force'
-  end
+#  desc 'Optimize a Laravel installation for optimimum performance in production.'
+#  task :optimize_release do
+#    invoke 'laravel:artisan', :optimize, :'--force'
+#  end
 
   desc 'Run migrations against the database using Artisan.'
   task :migrate_db do |_t, args|
@@ -174,5 +174,5 @@ namespace :laravel do
   after 'deploy:symlink:shared', 'laravel:create_linked_acl_paths'
   after 'deploy:symlink:shared', 'deploy:set_permissions:acl'
   after 'deploy:symlink:shared', 'laravel:upload_dotenv_file'
-  before 'deploy:updated', 'laravel:optimize_release'
+  # before 'deploy:updated', 'laravel:optimize_release'
 end
